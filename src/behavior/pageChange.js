@@ -1,5 +1,6 @@
 import { lazyReportBatch } from '../report';
 import {generateUniqueId} from '../utils';
+//监听路由跳转
 export default function pageChange() {
     // hash histroy
     let oldUrl = '';
