@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+        <script type="module">
+        import {onCLS, onFID, onLCP} from 'https://unpkg.com/web-vitals@3/dist/web-vitals.attribution.js?module';
+       onCLS(console.log);
+       onFID(console.log);
+       onLCP(console.log);
+        window.addEventListener('load',(e)=>{
+            let timing = performance.getEntriesByType('navigation')[0]
+            console.log('DNS 解析耗时',timing.domainLookupEnd-timing.domainLookupStart)
+            console.log('TCP 连接耗时',timing.connectEnd-timing.connectStart)
+            console.log('SSL 安全连接耗时',timing.connectEnd-timing.secureConnectionStart)
+            console.log('网络请求耗时 (TTFB)',timing.responseStart-timing.requestStart)
+            console.log('数据传输耗时',timing.responseEnd-timing.responseStart)
+            console.log('DOM 解析耗时',timing.domInteractive-timing.responseEnd)
+            console.log('资源加载耗时',timing.loadEventStart-timing.domContentLoadedEventEnd)
+            console.log('First Byte时间',timing.responseStart-timing.domainLookupStart)
+            console.log('白屏时间',timing.responseEnd-timing.fetchStart)
+            console.log('首次可交互时间',timing.domInteractive-timing.fetchStart)
+            console.log('DOM Ready 时间',timing.domContentLoadEventEnd-timing.fetchStart)
+            console.log('页面完全加载时间',timing.loadEventStart-timing.fetchStart)
+            console.log('http 头部大小',timing.transferSize-timing.encodedBodySize)
+            console.log('重定向次数',timing.redirectCount)
+            console.log('重定向耗时',timing.redirectEnd-timing.redirectStart)
+        })
+   </script>
+</head>
+<body>
+    <div>test</div>
+</body>
+</html>
