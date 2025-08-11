@@ -1,3 +1,4 @@
+//统计FP/FCP时间
 import { lazyReportBatch } from '../report';
 export default function observerPaint() {
     const entryHandler = (list) => {
