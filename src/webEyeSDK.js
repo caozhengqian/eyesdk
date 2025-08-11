@@ -64,6 +64,6 @@ export default {
 
 // webEyeSDK.init({
 //     appId: '10000',
-//     batchSize: 50,
+//     batchSize: 50,//设置50条上传
 
 // })
