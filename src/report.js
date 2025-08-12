@@ -46,7 +46,7 @@ export function imgRequest(data) {
 }
 // 普通ajax发送请求数据
 export function xhrRequest(data) {
-    if (window.requestIdleCallback) {
+    if (window.requestIdleCallback) {//浏览器空闲时
         window.requestIdleCallback(
             () => {
                 const xhr = new XMLHttpRequest();
