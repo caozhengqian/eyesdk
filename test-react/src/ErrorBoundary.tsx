@@ -1,4 +1,5 @@
 import React from 'react';
+import monitor from './monitor';
 class ErrorBoundary extends React.Component {
     constructor(props) {
         super(props);
