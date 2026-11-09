@@ -1,34 +1,30 @@
-import React from 'react';
-import monitor from './monitor';
-class ErrorBoundary extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = { hasError: false };
-    }
+import { Component, type ReactNode } from 'react';
 
-    static getDerivedStateFromError(error) {
-        // 更新状态，以便下一次渲染将显示后备 UI。
-        return { hasError: true };
-    }
-
-    componentDidCatch(error, info) {
-        // 示例“组件堆栈”：
-        //   在 ComponentThatThrows 中（由 App 创建）
-        //   在 ErrorBoundary 中（由 APP 创建）
-        //   在 div 中（由 APP 创建）
-        //   在 App 中
-        // logErrorToMyService(error, info.componentStack);
-        // todo: 记录错误信息
-        monitor.errorBoundary(error, info.componentStack);
-    }
-
-    render() {
-        if (this.state.hasError) {
-            // 你可以渲染任何自定义后备 UI
-            return this.props.fallback;
-        }
-
-        return this.props.children;
-    }
+interface Props {
+  fallback: ReactNode;
+  children?: ReactNode;
 }
+
+interface State {
+  hasError: boolean;
+}
+
+class ErrorBoundary extends Component<Props, State> {
+  state: State = { hasError: false };
+
+  // 捕获子组件渲染阶段抛出的错误，更新状态以便下一次渲染显示后备 UI。
+  // 错误上报已交由 createRoot 的 onCaughtError / onUncaughtError 处理。
+  static getDerivedStateFromError(_error: unknown): State {
+    return { hasError: true };
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return this.props.fallback;
+    }
+
+    return this.props.children;
+  }
+}
+
 export default ErrorBoundary;
