@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	"server/models"
 
 	"github.com/gin-gonic/gin"
@@ -10,16 +9,27 @@ import (
 type ApiController struct{}
 
 func (con ApiController) Index(c *gin.Context) {
-	fmt.Println(models.UnixToTime(1685664000))
-	username, _ := c.Get("username")
-	//类型断言
-	v, ok := username.(string)
-	if ok == true {
-		c.String(200, "我是一个api接口-Index--"+v)
+
+	c.String(200, "我是测试的一个api接口")
+}
+func (con ApiController) SetError(c *gin.Context) {
+	errmsg := c.PostForm("errmsg")
+	eye := models.Eye{
+		Errmsg: errmsg,
+	}
+	if err := models.DB.Create(&eye).Error; err != nil {
+		c.JSON(200, gin.H{
+			"success": false,
+			"message": "插入失败",
+			"error":   err.Error(),
+		})
 		return
 	}
-
-	c.String(200, "我是一个api接口")
+	c.JSON(200, gin.H{
+		"success": true,
+		"message": "插入成功",
+		"data":    eye,
+	})
 }
 func (con ApiController) GetDeposit(c *gin.Context) {
 	depositList := []models.Deposit{}
