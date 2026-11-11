@@ -1,10 +1,10 @@
 const config = {
-    url: '',
+    url: 'http://127.0.0.1:8080/api/seterror',
     projectName: 'eyesdk',
     appId: '123456',
     userId: '123456',
     isImageUpload: false,
-    batchSize: 5,
+    batchSize: 1,
 };
 export function setConfig(options) {
     for (const key in config) {

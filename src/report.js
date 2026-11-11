@@ -4,7 +4,7 @@ import {addCache, getCache, clearCache} from './cache';
 export const originalProto = XMLHttpRequest.prototype;
 export const originalOpen = XMLHttpRequest.prototype.open;
 export const originalSend = XMLHttpRequest.prototype.send;
-const API_URL = 'http://127.0.0.1:8080/api/seterror';
+const API_URL = config.url;
 export function isSupportSendBeacon() {
     return 'sendBeacon' in navigator;
 }

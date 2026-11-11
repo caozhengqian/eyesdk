@@ -1,10 +1,10 @@
 var config = {
-  url: '',
+  url: 'http://127.0.0.1:8080/api/seterror',
   projectName: 'eyesdk',
   appId: '123456',
   userId: '123456',
   isImageUpload: false,
-  batchSize: 5
+  batchSize: 1
 };
 function setConfig(options) {
   for (var key in config) {
@@ -158,6 +158,7 @@ function clearCache() {
 
 var originalOpen$1 = XMLHttpRequest.prototype.open;
 var originalSend$1 = XMLHttpRequest.prototype.send;
+var API_URL = config.url;
 function report(data) {
   if (!config.url) {
     console.error('请设置上传 url 地址');
@@ -192,40 +193,49 @@ function lazyReportBatch(data) {
 // 图片发送数据
 function imgRequest(data) {
   var img = new Image();
-  // http://127.0.0.1:8080/api?data=encodeURIComponent(data)
-  img.src = "".concat(config.url, "?data=").concat(encodeURIComponent(JSON.stringify(data)));
+  // http://127.0.0.1:8080/api/seterror?errmsg=encodeURIComponent(data)
+  img.src = "".concat(API_URL, "?errmsg=").concat(encodeURIComponent(JSON.stringify(data)));
 }
 // 普通ajax发送请求数据
 function xhrRequest(data) {
+  // 服务端用 c.ShouldBindJSON 解析，发送 JSON
+  var body = JSON.stringify({
+    errmsg: data
+  });
   if (window.requestIdleCallback) {
     //浏览器空闲时
     window.requestIdleCallback(function () {
       var xhr = new XMLHttpRequest();
-      originalOpen$1.call(xhr, 'post', config.url);
-      originalSend$1.call(xhr, JSON.stringify(data));
+      originalOpen$1.call(xhr, 'post', API_URL);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      originalSend$1.call(xhr, body);
     }, {
       timeout: 3000
     });
   } else {
     setTimeout(function () {
       var xhr = new XMLHttpRequest();
-      originalOpen$1.call(xhr, 'post', url);
-      originalSend$1.call(xhr, JSON.stringify(data));
+      originalOpen$1.call(xhr, 'post', API_URL);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      originalSend$1.call(xhr, body);
     });
   }
 }
 
 // const sendBeacon = isSupportSendBeacon() ? navigator.sendBeacon : xhrRequest
 function beaconRequest(data) {
+  var body = JSON.stringify({
+    errmsg: data
+  });
   if (window.requestIdleCallback) {
     window.requestIdleCallback(function () {
-      window.navigator.sendBeacon(config.url, data);
+      window.navigator.sendBeacon(API_URL, body);
     }, {
       timeout: 3000
     });
   } else {
     setTimeout(function () {
-      window.navigator.sendBeacon(config.url, data);
+      window.navigator.sendBeacon(API_URL, body);
     });
   }
 }
