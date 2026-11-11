@@ -47,13 +47,14 @@ export function imgRequest(data) {
 }
 // 普通ajax发送请求数据
 export function xhrRequest(data) {
-    // 服务端用 c.PostForm("errmsg") 解析，需表单编码
-    const body = new URLSearchParams({ errmsg: data });
+    // 服务端用 c.ShouldBindJSON 解析，发送 JSON
+    const body = JSON.stringify({ errmsg: data });
     if (window.requestIdleCallback) {//浏览器空闲时
         window.requestIdleCallback(
             () => {
                 const xhr = new XMLHttpRequest();
                 originalOpen.call(xhr, 'post', API_URL);
+                xhr.setRequestHeader('Content-Type', 'application/json');
                 originalSend.call(xhr, body);
             },
             { timeout: 3000 }
@@ -62,6 +63,7 @@ export function xhrRequest(data) {
         setTimeout(() => {
             const xhr = new XMLHttpRequest();
             originalOpen.call(xhr, 'post', API_URL);
+            xhr.setRequestHeader('Content-Type', 'application/json');
             originalSend.call(xhr, body);
         });
     }
@@ -69,8 +71,7 @@ export function xhrRequest(data) {
 
 // const sendBeacon = isSupportSendBeacon() ? navigator.sendBeacon : xhrRequest
 export function beaconRequest(data) {
-    // URLSearchParams 会以 application/x-www-form-urlencoded 发送，供 c.PostForm 解析
-    const body = new URLSearchParams({ errmsg: data });
+    const body = JSON.stringify({ errmsg: data });
     if (window.requestIdleCallback) {
         window.requestIdleCallback(
             () => {
