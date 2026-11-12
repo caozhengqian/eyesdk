@@ -1,5 +1,6 @@
 //统计LCP
 import { lazyReportBatch } from '../report';
+import { getTimeNow } from '../utils';
 export default function observerLCP() {
     const entryHandler = (list) => {
         if (observer) {
@@ -13,6 +14,7 @@ export default function observerLCP() {
                 type: 'performance',
                 subType: entry.name,
                 pageUrl: window.location.href,
+                getTimeNow: getTimeNow(),
             }
             // 发送数据 todo;
             lazyReportBatch(reportData);

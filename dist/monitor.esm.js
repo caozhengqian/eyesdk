@@ -144,6 +144,19 @@ function deepCopy(target) {
 function generateUniqueId() {
   return 'id-' + Date.now() + '-' + Math.random().toString(36).substring(2, 9);
 }
+function getTimeNow() {
+  var date = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : new Date();
+  var pad = function pad(n) {
+    return String(n).padStart(2, '0');
+  };
+  var year = date.getFullYear();
+  var month = pad(date.getMonth() + 1); // 月份从 0 开始
+  var day = pad(date.getDate());
+  var hours = pad(date.getHours());
+  var minutes = pad(date.getMinutes());
+  var seconds = pad(date.getSeconds());
+  return "".concat(year, "-").concat(month, "-").concat(day, " ").concat(hours, ":").concat(minutes, ":").concat(seconds);
+}
 
 var cache = [];
 function getCache() {
@@ -361,7 +374,8 @@ function observerLCP() {
         var reportData = _objectSpread2(_objectSpread2({}, json), {}, {
           type: 'performance',
           subType: entry.name,
-          pageUrl: window.location.href
+          pageUrl: window.location.href,
+          getTimeNow: getTimeNow()
         });
         // 发送数据 todo;
         lazyReportBatch(reportData);
